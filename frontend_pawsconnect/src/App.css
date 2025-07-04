@@ -167,6 +167,259 @@ code {
   }
 }
 
+/* ========== Skeleton Loader CSS ========== */
+.skeleton-animate {
+  background: linear-gradient(90deg, #f9f7ef 25%, #f0ede6 50%, #f9f7ef 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.2s infinite linear;
+  border-radius: 5px;
+}
+@keyframes skeleton-shimmer {
+  0% { background-position: -100% 0; }
+  100% { background-position: 100% 0; }
+}
+
+.pet-card-skeleton {
+  pointer-events: none;
+  /* De-emphasize border, remove hover, keep rounded shape: */
+  filter: grayscale(0.14) opacity(0.84);
+}
+
+.skeleton-text {
+  display: block;
+  height: 1.14em;
+  margin-top: 0.3em;
+  border-radius: 4.5px;
+  background: #ececec;
+  opacity: 0.26;
+}
+
+.skeleton-badge {
+  width: 7em;
+  height: 1.25em;
+  margin-top: 0.30em;
+  background: #f3e1b7 !important;
+  opacity: 0.52;
+}
+
+.skeleton-tag {
+  width: 3.5em;
+  height: 1em;
+  margin-right: 6px;
+  background: #ffe066;
+  opacity: 0.19;
+  border-radius: 20px;
+}
+.skeleton-grid {
+  pointer-events: none;
+}
+
+/* ========== PetGrid & Card Styles ========== */
+
+.pet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.35rem;
+  width: 100%;
+  padding: 1.2rem 0 1.3rem 0;
+}
+
+.pet-grid-empty {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  padding: 2.6rem 0;
+}
+
+.pet-card {
+  background: var(--bg-secondary, #f8fafb);
+  border-radius: var(--radius);
+  box-shadow: 0 1.5px 12px 0 rgba(110,198,246,0.05);
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  cursor: pointer;
+  transition: box-shadow var(--transition), transform var(--transition), background var(--transition);
+  will-change: transform;
+  outline: none;
+}
+.pet-card:hover, .pet-card:focus-visible {
+  box-shadow: 0 5px 20px 0 rgba(254,224,102,0.09), 0 2px 8px 0 rgba(110,198,246,0.08);
+  transform: translateY(-2px) scale(1.012);
+  background: var(--bg-primary, #fffdfa);
+}
+
+.pet-img-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  min-height: 180px;
+  aspect-ratio: 1.3/1;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+  overflow: hidden;
+  background: linear-gradient(120deg, var(--accent) 60%, var(--secondary) 100%);
+}
+
+.pet-img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  display: block;
+}
+
+.pet-img-skeleton {
+  width: 100%;
+  height: 170px;
+  background: linear-gradient(90deg, #fffdfa 40%, #ffe066 60%, #fffdfa 100%);
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+}
+
+.pet-card-badge-ct {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+}
+
+.pet-status-badge {
+  display: inline-block;
+  font-size: 0.93rem;
+  font-weight: 600;
+  padding: 0.24em 0.96em;
+  border-radius: 999px;
+  box-shadow: 0 0.5px 4px 0 rgba(100,100,100,0.09);
+  letter-spacing: 0.02em;
+  margin-top: 0.15em;
+}
+
+.pet-card-body {
+  padding: 1.1em 1.25em .85em 1.25em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.pet-card-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8em;
+  margin-bottom: 0.35em;
+  flex-wrap: wrap;
+}
+
+.pet-card-name {
+  margin: 0;
+  font-size: 1.16rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.pet-card-breed {
+  font-size: 0.96rem;
+  color: var(--secondary, #6ec6f6);
+  font-weight: 500;
+  margin-left: 0.25em;
+}
+
+.pet-card-meta-row {
+  display: flex;
+  gap: .8em;
+  font-size: .99rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.36em;
+  flex-wrap: wrap;
+}
+.pet-card-age,
+.pet-card-location {
+  display: inline-block;
+  min-width: 0;
+}
+
+.pet-card-tags-row {
+  margin-top: 0.2em;
+  display: flex;
+  gap: 0.46em;
+  flex-wrap: wrap;
+}
+
+.pet-card-tag {
+  background: var(--primary, #ffe066);
+  color: #1a1a1a;
+  border-radius: 999px;
+  padding: 0.15em 0.9em;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: .02em;
+  opacity: .98;
+}
+
+@media (max-width: 768px) {
+  .pet-grid {
+    grid-template-columns: 1fr;
+    gap: 0.89rem;
+    padding: 0.6rem 0 0.6rem 0;
+  }
+  .pet-card-body {
+    padding: 0.8em 0.8em .67em 0.7em;
+  }
+  .pet-card-name {
+    font-size: 1.02rem;
+  }
+}
+
+/* ========== Skeleton Loader CSS ========== */
+.skeleton-animate {
+  background: linear-gradient(90deg, #f9f7ef 25%, #f0ede6 50%, #f9f7ef 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.2s infinite linear;
+  border-radius: 5px;
+}
+@keyframes skeleton-shimmer {
+  0% { background-position: -100% 0; }
+  100% { background-position: 100% 0; }
+}
+
+.pet-card-skeleton {
+  pointer-events: none;
+  /* De-emphasize border, remove hover, keep rounded shape: */
+  filter: grayscale(0.14) opacity(0.84);
+}
+
+.skeleton-text {
+  display: block;
+  height: 1.14em;
+  margin-top: 0.3em;
+  border-radius: 4.5px;
+  background: #ececec;
+  opacity: 0.26;
+}
+
+.skeleton-badge {
+  width: 7em;
+  height: 1.25em;
+  margin-top: 0.30em;
+  background: #f3e1b7 !important;
+  opacity: 0.52;
+}
+
+.skeleton-tag {
+  width: 3.5em;
+  height: 1em;
+  margin-right: 6px;
+  background: #ffe066;
+  opacity: 0.19;
+  border-radius: 20px;
+}
+.skeleton-grid {
+  pointer-events: none;
+}
+
 /* ========== Landing Page Styles ========== */
 .landing-root {
   min-height: 100vh;
@@ -374,4 +627,51 @@ code {
     padding-top: 0.11rem;
     padding-bottom: 0.28rem;
   }
+}
+
+/* ========== Skeleton Loader CSS ========== */
+.skeleton-animate {
+  background: linear-gradient(90deg, #f9f7ef 25%, #f0ede6 50%, #f9f7ef 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.2s infinite linear;
+  border-radius: 5px;
+}
+@keyframes skeleton-shimmer {
+  0% { background-position: -100% 0; }
+  100% { background-position: 100% 0; }
+}
+
+.pet-card-skeleton {
+  pointer-events: none;
+  /* De-emphasize border, remove hover, keep rounded shape: */
+  filter: grayscale(0.14) opacity(0.84);
+}
+
+.skeleton-text {
+  display: block;
+  height: 1.14em;
+  margin-top: 0.3em;
+  border-radius: 4.5px;
+  background: #ececec;
+  opacity: 0.26;
+}
+
+.skeleton-badge {
+  width: 7em;
+  height: 1.25em;
+  margin-top: 0.30em;
+  background: #f3e1b7 !important;
+  opacity: 0.52;
+}
+
+.skeleton-tag {
+  width: 3.5em;
+  height: 1em;
+  margin-right: 6px;
+  background: #ffe066;
+  opacity: 0.19;
+  border-radius: 20px;
+}
+.skeleton-grid {
+  pointer-events: none;
 }

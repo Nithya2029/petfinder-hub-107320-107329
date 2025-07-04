@@ -7,8 +7,9 @@ import "../App.css";
  * PUBLIC_INTERFACE
  * LandingPage
  * Main landing page component for PawsConnect, including intro, branding, sticky filter/search, SearchBar, and CTA.
+ * Accepts optional onAdoptNow callback.
  */
-function LandingPage() {
+function LandingPage({ onAdoptNow }) {
   // Local search state - to be integrated with actual search/filtering in future steps
   const [searchValue, setSearchValue] = useState("");
 
@@ -50,7 +51,10 @@ function LandingPage() {
 
       {/* CTA */}
       <section className="landing-cta">
-        <button className="btn btn-large adopt-now-cta" onClick={() => window.scrollTo(0, document.body.scrollHeight)}>
+        <button
+          className="btn btn-large adopt-now-cta"
+          onClick={onAdoptNow || (() => window.scrollTo(0, document.body.scrollHeight))}
+        >
           Adopt Now
         </button>
       </section>

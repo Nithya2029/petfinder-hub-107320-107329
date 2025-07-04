@@ -3,6 +3,7 @@ import './App.css';
 import LandingPage from './components/LandingPage';
 import PetGrid from './components/PetGrid';
 import Filters from './components/Filters';
+import PetModal from './components/PetModal';
 import { usePetFilters } from './hooks/usePetFilters';
 
 /**
@@ -15,6 +16,9 @@ function App() {
   const [showGrid, setShowGrid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [pets, setPets] = useState([]);
+  // Pet modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedPet, setSelectedPet] = useState(null);
 
   // Effect to apply theme to document element
   useEffect(() => {
@@ -36,7 +40,10 @@ function App() {
             age: "2 yrs",
             status: "Available",
             location: "San Jose",
-            tags: ["Playful", "Vaccinated"]
+            tags: ["Playful", "Vaccinated"],
+            contactEmail: "shelter@pawsconnect.org",
+            contactWhatsapp: "+11235551234",
+            description: "Friendly, loves fetch, ready to find a forever home!"
           },
           {
             id: 2,
@@ -46,7 +53,10 @@ function App() {
             age: "8 mo",
             status: "Adopted",
             location: "Fremont",
-            tags: ["Calm", "Litter Trained"]
+            tags: ["Calm", "Litter Trained"],
+            contactEmail: "adoptions@catrescue.net",
+            contactWhatsapp: "",
+            description: "Sweet tabby, indoor cat, gets along with kids and other cats."
           },
           {
             id: 3,
@@ -56,7 +66,10 @@ function App() {
             age: "1 yr",
             status: "Under Treatment",
             location: "Mountain View",
-            tags: ["Energetic"]
+            tags: ["Energetic"],
+            contactEmail: "",
+            contactWhatsapp: "+11235554321",
+            description: "Recently rescued, in recovery, reserved for special adoption."
           },
           {
             id: 4,
@@ -66,7 +79,8 @@ function App() {
             age: "3 yrs",
             status: "Available",
             location: "Santa Clara",
-            tags: ["Microchipped"]
+            tags: ["Microchipped"],
+            contactEmail: "localrescue@santaclara.gov"
           }
         ]);
         setLoading(false);
@@ -98,6 +112,17 @@ function App() {
     }, 0);
   };
 
+  // Handler for opening modal from PetCard/PetGrid
+  const handlePetClick = (pet) => {
+    setSelectedPet(pet);
+    setModalOpen(true);
+  };
+  // Handler to close modal
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedPet(null);
+  };
+
   return (
     <div className="App">
       <button
@@ -108,6 +133,8 @@ function App() {
         {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
       </button>
       <main>
+        {/* Pet detail modal */}
+        <PetModal open={modalOpen} pet={selectedPet} onClose={handleCloseModal} />
         {/* Show landing page until grid "mode" */}
         {!showGrid ? (
           <LandingPage onAdoptNow={handleAdoptNow} />
@@ -124,7 +151,7 @@ function App() {
               onClear={clearFilters}
               style={{marginBottom:"1rem"}}
             />
-            <PetGrid pets={filteredPets} loading={loading} />
+            <PetGrid pets={filteredPets} loading={loading} onPetClick={handlePetClick} />
           </section>
         )}
       </main>

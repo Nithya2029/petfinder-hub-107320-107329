@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "../App.css";
+import useFavorites from "../hooks/useFavorites";
 
 /**
  * PUBLIC_INTERFACE
@@ -47,8 +48,12 @@ function getStatusBadge(status) {
   );
 }
 
-// PUBLIC_INTERFACE
+/**
+ * Adds a favorites heart icon on card corner, which can be toggled.
+ * Icon only handles favorite toggle (not opening modal!).
+ */
 function PetCard({
+  id,
   name,
   breed,
   image,
@@ -59,6 +64,40 @@ function PetCard({
   tags = [],
   ...rest
 }) {
+  const { isFavorite, toggleFavorite } = useFavorites();
+
+  // Handler for heart click (should not trigger parent card click/modal)
+  function handleFavoriteClick(e) {
+    e.stopPropagation();
+    toggleFavorite(id);
+  }
+
+  // Simple heart SVG, visually filled if favorited.
+  const HeartIcon = ({ filled = false }) => (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 28 28"
+      fill={filled ? "var(--secondary, #6ec6f6)" : "none"}
+      stroke={filled ? "var(--secondary, #6ec6f6)" : "#bbb"}
+      strokeWidth="2.1"
+      style={{
+        display: "inline-block",
+        verticalAlign: "middle",
+        filter: filled ? "drop-shadow(0 1px 6px #99e4fc44)" : "none"
+      }}
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M14 25C13.49 25 13.02 24.85 12.61 24.58C8.36 21.69 5 18.82 5 15.41C5 12.91 7.01 11 9.5 11C11.12 11 12.58 11.91 13.33 13.18C13.56 13.56 14.44 13.56 14.67 13.18C15.42 11.91 16.88 11 18.5 11C20.99 11 23 12.91 23 15.41C23 18.82 19.64 21.69 15.39 24.58C14.98 24.85 14.51 25 14 25Z"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        fill={filled ? "var(--secondary, #6ec6f6)" : "none"}
+      />
+    </svg>
+  );
+
   return (
     <div
       className="pet-card"
@@ -69,10 +108,38 @@ function PetCard({
       style={{
         minWidth: 0,
         touchAction: "manipulation",
+        position: "relative", // for absolute favorite icon
         ...rest.style
       }}
       {...rest}
     >
+      {/* Favorite icon on top-right: visible always, filled if favorite */}
+      <button
+        className="favorite-btn"
+        aria-label={isFavorite?.(id) ? "Remove from favorites" : "Add to favorites"}
+        title={isFavorite?.(id) ? "Remove from favorites" : "Add to favorites"}
+        onClick={handleFavoriteClick}
+        tabIndex={0}
+        style={{
+          position: "absolute",
+          right: 10,
+          top: 10,
+          background: "rgba(255,255,255,0.90)",
+          border: "none",
+          borderRadius: "50%",
+          width: 34,
+          height: 34,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 3,
+          padding: 0,
+          boxShadow: "0 2px 9px 0 rgba(110,198,246,0.08)"
+        }}
+        onMouseDown={e => e.stopPropagation()}
+      >
+        <HeartIcon filled={isFavorite?.(id)} />
+      </button>
       <div className="pet-img-container">
         {image ? (
           <img
@@ -114,6 +181,7 @@ function PetCard({
 }
 
 PetCard.propTypes = {
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   name: PropTypes.string,
   breed: PropTypes.string,
   image: PropTypes.string,

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import ImageCarousel from "./ImageCarousel";
 import Map from "./Map";
+import useFavorites from "../hooks/useFavorites";
 import "../App.css";
 
 /**
@@ -14,6 +15,9 @@ import "../App.css";
  *   onClose: function to close the modal
  */
 function PetModal({ open, pet, onClose }) {
+  // Always call hooks before any conditional return (per React rules)
+  const { isFavorite, toggleFavorite } = useFavorites();
+
   // Animation for modal closing (fade out) UX polish
   const [animateExit, setAnimateExit] = useState(false);
   const mountedRef = useRef(false);
@@ -54,6 +58,32 @@ function PetModal({ open, pet, onClose }) {
   }, [open]);
 
   if (!open || !pet) return null;
+
+  // Heart icon for modal (same SVG logic as card)
+  const HeartIcon = ({ filled = false }) => (
+    <svg
+      width="26"
+      height="26"
+      viewBox="0 0 28 28"
+      fill={filled ? "var(--secondary, #6ec6f6)" : "none"}
+      stroke={filled ? "var(--secondary, #6ec6f6)" : "#bbb"}
+      strokeWidth="2.1"
+      style={{
+        display: "inline-block",
+        verticalAlign: "middle",
+        filter: filled ? "drop-shadow(0 1px 6px #99e4fc44)" : "none"
+      }}
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M14 25C13.49 25 13.02 24.85 12.61 24.58C8.36 21.69 5 18.82 5 15.41C5 12.91 7.01 11 9.5 11C11.12 11 12.58 11.91 13.33 13.18C13.56 13.56 14.44 13.56 14.67 13.18C15.42 11.91 16.88 11 18.5 11C20.99 11 23 12.91 23 15.41C23 18.82 19.64 21.69 15.39 24.58C14.98 24.85 14.51 25 14 25Z"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        fill={filled ? "var(--secondary, #6ec6f6)" : "none"}
+      />
+    </svg>
+  );
 
   // Flatten images for demo—accepts image or images (string or array)
   let images = [];
@@ -125,6 +155,31 @@ Thank you!
         onClick={(e) => e.stopPropagation()}
         tabIndex={0}
       >
+        {/* Favorites toggle button (heart), top-right, left of close */}
+        <button
+          className="favorite-btn"
+          aria-label={isFavorite?.(pet.id) ? "Remove from favorites" : "Add to favorites"}
+          title={isFavorite?.(pet.id) ? "Remove from favorites" : "Add to favorites"}
+          onClick={e => { e.stopPropagation(); toggleFavorite(pet.id); }}
+          style={{
+            position: "absolute",
+            right: 58,
+            top: 13,
+            background: "rgba(255,255,255,0.93)",
+            border: "none",
+            borderRadius: "50%",
+            width: 34,
+            height: 34,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 3,
+            padding: 0,
+            boxShadow: "0 2px 9px 0 rgba(110,198,246,0.09)"
+          }}
+        >
+          <HeartIcon filled={isFavorite?.(pet.id)} />
+        </button>
         {/* Close Button */}
         <button
           className="pet-modal-close"

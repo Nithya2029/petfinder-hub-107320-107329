@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import LandingPage from './components/LandingPage';
 import PetGrid from './components/PetGrid';
+import Filters from './components/Filters';
+import { usePetFilters } from './hooks/usePetFilters';
 
 /**
  * PUBLIC_INTERFACE
@@ -72,6 +74,15 @@ function App() {
     }
   }, [showGrid]);
 
+  // Integrate the usePetFilters hook (when pets loaded)
+  const {
+    filters,
+    setFilter,
+    clearFilters,
+    filteredPets,
+    uniqueOptions
+  } = usePetFilters(pets);
+
   // PUBLIC_INTERFACE
   const toggleTheme = () => {
     setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
@@ -105,7 +116,15 @@ function App() {
             <h2 style={{textAlign: "left", fontWeight: 800, marginTop: "1.5rem", marginBottom: ".66rem", color: "var(--text-primary)"}}>
               Adoptable Pets Near You
             </h2>
-            <PetGrid pets={pets} loading={loading} />
+            {/* Filters and grid */}
+            <Filters
+              filters={filters}
+              options={uniqueOptions}
+              onFilterChange={setFilter}
+              onClear={clearFilters}
+              style={{marginBottom:"1rem"}}
+            />
+            <PetGrid pets={filteredPets} loading={loading} />
           </section>
         )}
       </main>

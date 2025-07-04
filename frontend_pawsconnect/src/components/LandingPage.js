@@ -44,7 +44,7 @@ function LandingPage({ onAdoptNow }) {
           />
           {/* Minimal filter stub, leave placeholder for filter components */}
           <div className="filter-row-placeholder" aria-hidden>
-            {/* To be replaced with actual Breed/Age/Location filter UI */}
+            {/* Filters UI renders only after CTA (with grid), this preserves sticky layout & responsive spacing. */}
           </div>
         </div>
       </section>

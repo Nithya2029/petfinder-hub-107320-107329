@@ -215,22 +215,21 @@ code {
 }
 
 /* ========== PetGrid & Card Styles ========== */
-
 .pet-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 1.35rem;
   width: 100%;
   padding: 1.2rem 0 1.3rem 0;
+  animation: gridFadeIn 0.49s cubic-bezier(.27,1.13,.65,.99);
+}
+@keyframes gridFadeIn {
+  0% { opacity: 0; transform: translateY(25px);}
+  80% { opacity: .92 }
+  100% { opacity: 1; transform: none;}
 }
 
-.pet-grid-empty {
-  text-align: center;
-  font-size: 1.1rem;
-  color: var(--text-secondary);
-  padding: 2.6rem 0;
-}
-
+/* ------ PET CARD: INTERACTIVE ANIMATION ------ */
 .pet-card {
   background: var(--bg-secondary, #f8fafb);
   border-radius: var(--radius);
@@ -241,183 +240,101 @@ code {
   flex-direction: column;
   min-width: 0;
   cursor: pointer;
-  transition: box-shadow var(--transition), transform var(--transition), background var(--transition);
-  will-change: transform;
+  transition:
+    box-shadow var(--transition),
+    transform var(--transition),
+    background var(--transition),
+    filter 0.26s cubic-bezier(.4,0,.2,1);
+  will-change: transform, box-shadow, filter;
   outline: none;
+  /* For entrance animation */
+  opacity: 1;
 }
-.pet-card:hover, .pet-card:focus-visible {
-  box-shadow: 0 5px 20px 0 rgba(254,224,102,0.09), 0 2px 8px 0 rgba(110,198,246,0.08);
-  transform: translateY(-2px) scale(1.012);
+
+.pet-card:hover,
+.pet-card:focus-visible {
+  box-shadow: 0 10px 32px 0 rgba(254,224,102,0.16), 0 4px 18px 0 rgba(110,198,246,0.12);
+  transform: translateY(-7px) scale(1.045);
   background: var(--bg-primary, #fffdfa);
+  filter: brightness(1.04) saturate(1.02);
+  z-index: 2;
 }
 
-.pet-img-container {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  position: relative;
-  width: 100%;
-  min-height: 180px;
-  aspect-ratio: 1.3/1;
-  border-top-left-radius: var(--radius);
-  border-top-right-radius: var(--radius);
-  overflow: hidden;
-  background: linear-gradient(120deg, var(--accent) 60%, var(--secondary) 100%);
+/* Card grid entrance animation (for new grid render) */
+.pet-card.entrance {
+  animation: petCardEntrance 0.49s cubic-bezier(.27,1.13,.65,.99), fadeIn 0.49s;
+  /* staggers handled inline via animationDelay */
 }
-
-.pet-img {
-  width: 100%;
-  height: 170px;
-  object-fit: cover;
-  display: block;
-}
-
-.pet-img-skeleton {
-  width: 100%;
-  height: 170px;
-  background: linear-gradient(90deg, #fffdfa 40%, #ffe066 60%, #fffdfa 100%);
-  border-top-left-radius: var(--radius);
-  border-top-right-radius: var(--radius);
-}
-
-.pet-card-badge-ct {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 3;
-}
-
-.pet-status-badge {
-  display: inline-block;
-  font-size: 0.93rem;
-  font-weight: 600;
-  padding: 0.24em 0.96em;
-  border-radius: 999px;
-  box-shadow: 0 0.5px 4px 0 rgba(100,100,100,0.09);
-  letter-spacing: 0.02em;
-  margin-top: 0.15em;
-}
-
-.pet-card-body {
-  padding: 1.1em 1.25em .85em 1.25em;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-
-.pet-card-title-row {
-  display: flex;
-  align-items: baseline;
-  gap: 0.8em;
-  margin-bottom: 0.35em;
-  flex-wrap: wrap;
-}
-
-.pet-card-name {
-  margin: 0;
-  font-size: 1.16rem;
-  font-weight: 800;
-  color: var(--text-primary);
-}
-
-.pet-card-breed {
-  font-size: 0.96rem;
-  color: var(--secondary, #6ec6f6);
-  font-weight: 500;
-  margin-left: 0.25em;
-}
-
-.pet-card-meta-row {
-  display: flex;
-  gap: .8em;
-  font-size: .99rem;
-  color: var(--text-secondary);
-  margin-bottom: 0.36em;
-  flex-wrap: wrap;
-}
-.pet-card-age,
-.pet-card-location {
-  display: inline-block;
-  min-width: 0;
-}
-
-.pet-card-tags-row {
-  margin-top: 0.2em;
-  display: flex;
-  gap: 0.46em;
-  flex-wrap: wrap;
-}
-
-.pet-card-tag {
-  background: var(--primary, #ffe066);
-  color: #1a1a1a;
-  border-radius: 999px;
-  padding: 0.15em 0.9em;
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: .02em;
-  opacity: .98;
-}
-
-@media (max-width: 768px) {
-  .pet-grid {
-    grid-template-columns: 1fr;
-    gap: 0.89rem;
-    padding: 0.6rem 0 0.6rem 0;
+@keyframes petCardEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+    filter: blur(2.5px) brightness(1.15) saturate(0.7);
   }
-  .pet-card-body {
-    padding: 0.8em 0.8em .67em 0.7em;
+  48% {
+    opacity: 0.45;
   }
-  .pet-card-name {
-    font-size: 1.02rem;
+  80% {
+    filter: blur(0.7px);
+    transform: translateY(-4px) scale(1.016);
+  }
+  99% {
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: none;
   }
 }
 
-/* ========== Skeleton Loader CSS ========== */
-.skeleton-animate {
-  background: linear-gradient(90deg, #f9f7ef 25%, #f0ede6 50%, #f9f7ef 75%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.2s infinite linear;
-  border-radius: 5px;
-}
-@keyframes skeleton-shimmer {
-  0% { background-position: -100% 0; }
-  100% { background-position: 100% 0; }
+@keyframes fadeIn {
+  from { opacity: 0;}
+  to   { opacity: 1;}
 }
 
-.pet-card-skeleton {
-  pointer-events: none;
-  /* De-emphasize border, remove hover, keep rounded shape: */
-  filter: grayscale(0.14) opacity(0.84);
+/* -------- PET MODAL ANIMATION --------- */
+.pet-modal-overlay {
+  animation: fadeInOverlay 0.30s cubic-bezier(.27,1.13,.65,.99);
 }
 
-.skeleton-text {
-  display: block;
-  height: 1.14em;
-  margin-top: 0.3em;
-  border-radius: 4.5px;
-  background: #ececec;
-  opacity: 0.26;
+@keyframes fadeInOverlay {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
-.skeleton-badge {
-  width: 7em;
-  height: 1.25em;
-  margin-top: 0.30em;
-  background: #f3e1b7 !important;
-  opacity: 0.52;
+.pet-modal-content {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  animation: petModalPopIn 0.38s cubic-bezier(.23,1.17,.42,1.05);
+  will-change: opacity, transform;
+}
+@keyframes petModalPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.84) translateY(54px);
+    filter: blur(2px);
+  }
+  80% {
+    filter: blur(0.5px);
+    transform: scale(1.05) translateY(-6px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: none;
+  }
 }
 
-.skeleton-tag {
-  width: 3.5em;
-  height: 1em;
-  margin-right: 6px;
-  background: #ffe066;
-  opacity: 0.19;
-  border-radius: 20px;
+.pet-modal-content.modal-exit {
+  animation: petModalFadeOut 0.25s cubic-bezier(.4,0,.2,1) forwards;
 }
-.skeleton-grid {
-  pointer-events: none;
+@keyframes petModalFadeOut {
+  to {
+    opacity: 0;
+    filter: blur(2px);
+    transform: scale(0.92) translateY(80px);
+  }
 }
 
 /* ========== Landing Page Styles ========== */
@@ -429,8 +346,14 @@ code {
   align-items: stretch;
   background: var(--bg-primary);
   padding-bottom: 2.5rem;
+  animation: fadeSlideIn 0.6s cubic-bezier(.34,1.31,.49,1) backwards;
 }
-
+@keyframes fadeSlideIn {
+  0% { opacity: 0; transform: translateY(42px);}
+  63% { opacity: 0.5 }
+  90% { filter: blur(0.3px);}
+  100% { opacity: 1; transform: none;}
+}
 .landing-intro {
   display: flex;
   flex-direction: column;
@@ -442,35 +365,12 @@ code {
   background: var(--bg-secondary);
   border-radius: var(--radius);
   box-shadow: 0 8px 36px 0 rgba(110,198,246,0.06);
+  animation: fadeSlideIntro 0.9s cubic-bezier(.34,1.31,.49,1) backwards;
 }
-
-.landing-logo {
-  width: 86px;
-  height: 86px;
-  border-radius: 50%;
-  margin-bottom: 0.7em;
-  box-shadow: 0 2px 12px 0 rgba(254,224,102,.12);
-  background: var(--accent);
-  object-fit: contain;
-}
-
-.landing-title {
-  margin: 0;
-  font-size: 2.25rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  line-height: 1.1;
-  color: var(--text-primary);
-}
-
-.landing-subtitle {
-  margin: 0.5rem 0 0 0;
-  font-size: 1.18rem;
-  line-height: 1.47;
-  color: var(--text-secondary);
-  font-weight: 500;
-  max-width: 380px;
-  text-align: center;
+@keyframes fadeSlideIntro {
+  0% { opacity: 0; transform: scale(.94) translateY(-19px);}
+  65% { opacity: .4 }
+  100% { opacity: 1; transform: none;}
 }
 
 /* Sticky search bar section */
@@ -741,51 +641,4 @@ code {
     height: 28px !important;
     font-size: 1.09rem !important;
   }
-}
-
-/* ========== Skeleton Loader CSS ========== */
-.skeleton-animate {
-  background: linear-gradient(90deg, #f9f7ef 25%, #f0ede6 50%, #f9f7ef 75%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.2s infinite linear;
-  border-radius: 5px;
-}
-@keyframes skeleton-shimmer {
-  0% { background-position: -100% 0; }
-  100% { background-position: 100% 0; }
-}
-
-.pet-card-skeleton {
-  pointer-events: none;
-  /* De-emphasize border, remove hover, keep rounded shape: */
-  filter: grayscale(0.14) opacity(0.84);
-}
-
-.skeleton-text {
-  display: block;
-  height: 1.14em;
-  margin-top: 0.3em;
-  border-radius: 4.5px;
-  background: #ececec;
-  opacity: 0.26;
-}
-
-.skeleton-badge {
-  width: 7em;
-  height: 1.25em;
-  margin-top: 0.30em;
-  background: #f3e1b7 !important;
-  opacity: 0.52;
-}
-
-.skeleton-tag {
-  width: 3.5em;
-  height: 1em;
-  margin-right: 6px;
-  background: #ffe066;
-  opacity: 0.19;
-  border-radius: 20px;
-}
-.skeleton-grid {
-  pointer-events: none;
 }

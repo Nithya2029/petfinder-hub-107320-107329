@@ -22,8 +22,9 @@ function PetGrid({ pets, loading, onPetClick }) {
     );
   }
 
+  // Animate entrance: staggered with index-based delay
   return (
-    <div className="pet-grid" style={{width: "100%"}}>
+    <div className="pet-grid" style={{ width: "100%" }}>
       {pets.map((pet, i) => (
         <PetCard
           key={pet.id || i}
@@ -35,6 +36,12 @@ function PetGrid({ pets, loading, onPetClick }) {
           status={pet.status}
           tags={pet.tags}
           onClick={() => onPetClick?.(pet)}
+          className="entrance"
+          style={{
+            // Stagger entrance animation (max 0.65s)
+            animationDelay: `${Math.min(i * 0.07, 0.65)}s`,
+            ...((pet && pet.style) || {}),
+          }}
         />
       ))}
     </div>

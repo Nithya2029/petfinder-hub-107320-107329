@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import ImageCarousel from "./ImageCarousel";
 import "../App.css";
@@ -13,17 +13,28 @@ import "../App.css";
  *   onClose: function to close the modal
  */
 function PetModal({ open, pet, onClose }) {
-  // Hook for Escape key: maintain hook ordering
+  // Animation for modal closing (fade out) UX polish
+  const [animateExit, setAnimateExit] = useState(false);
+  const mountedRef = useRef(false);
+
+  // Close with fade out
+  const handleBeginClose = () => {
+    setAnimateExit(true);
+    setTimeout(() => {
+      setAnimateExit(false);
+      onClose();
+    }, 250); // match CSS .modal-exit animation duration
+  };
+
+  // Listen for ESC, route to handleBeginClose for fade out
   useEffect(() => {
     if (!open) return;
-
     const handleEsc = (e) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") handleBeginClose();
     };
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
-    // eslint-disable-next-line
-  }, [open, onClose]);
+  }, [open]); // only needs open
 
   // Accessibility: Background scroll lock. Always run hook; effect only when open==true
   useEffect(() => {
@@ -32,6 +43,13 @@ function PetModal({ open, pet, onClose }) {
     return () => {
       document.body.style.overflow = "";
     };
+  }, [open]);
+
+  // Prevent animation when remounted for the first time (only for exit not entrance)
+  useEffect(() => {
+    if (open) mountedRef.current = true;
+    else mountedRef.current = false;
+    setAnimateExit(false);
   }, [open]);
 
   if (!open || !pet) return null;
@@ -78,17 +96,19 @@ Thank you!
         background: "rgba(34,38,42,0.58)",
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
-        animation: "fadeIn 0.18s",
+        justifyContent: "center"
       }}
-      onClick={onClose}
+      onClick={handleBeginClose}
       tabIndex={-1}
       aria-modal="true"
       role="dialog"
       aria-label={`${pet.name} details`}
     >
       <div
-        className="pet-modal-content"
+        className={
+          "pet-modal-content" +
+          (animateExit ? " modal-exit" : "")
+        }
         style={{
           background: "var(--bg-primary, #fffdfa)",
           color: "var(--text-primary)",
@@ -99,7 +119,7 @@ Thank you!
           boxShadow:
             "0 7px 40px 0 rgba(110,198,246,0.18), 0 2px 8px 0 rgba(254,224,102,.09)",
           padding: "2.1rem 1.6rem 1.4rem 1.6rem",
-          position: "relative",
+          position: "relative"
         }}
         onClick={(e) => e.stopPropagation()}
         tabIndex={0}
@@ -123,10 +143,10 @@ Thank you!
             alignItems: "center",
             justifyContent: "center",
             cursor: "pointer",
-            boxShadow: "0 1.5px 10px 0 rgba(110,198,246,.12)",
+            boxShadow: "0 1.5px 10px 0 rgba(110,198,246,.12)"
           }}
           aria-label="Close"
-          onClick={onClose}
+          onClick={handleBeginClose}
         >
           ×
         </button>
@@ -144,7 +164,7 @@ Thank you!
               display: "flex",
               alignItems: "center",
               gap: "0.65em",
-              flexWrap: "wrap",
+              flexWrap: "wrap"
             }}
           >
             <h2
@@ -152,7 +172,7 @@ Thank you!
                 fontSize: "1.34rem",
                 fontWeight: 800,
                 margin: "0 0.25em 0 0",
-                color: "var(--text-primary)",
+                color: "var(--text-primary)"
               }}
             >
               {pet.name}
@@ -166,7 +186,7 @@ Thank you!
                   fontWeight: 600,
                   padding: "0.18em 0.78em",
                   borderRadius: "999px",
-                  opacity: ".98",
+                  opacity: ".98"
                 }}
               >
                 {pet.breed}
@@ -179,7 +199,7 @@ Thank you!
               gap: ".8em",
               margin: "0.3em 0 0.46em 0",
               color: "var(--text-secondary)",
-              fontSize: "1.04rem",
+              fontSize: "1.04rem"
             }}
           >
             {pet.age && <span>{pet.age}</span>}
@@ -193,7 +213,7 @@ Thank you!
                   padding: "0.13em 0.85em",
                   fontWeight: 700,
                   fontSize: ".98em",
-                  opacity: "0.93",
+                  opacity: "0.93"
                 }}
               >
                 {pet.status}
@@ -206,7 +226,7 @@ Thank you!
                 marginTop: "0.17em",
                 display: "flex",
                 gap: "0.46em",
-                flexWrap: "wrap",
+                flexWrap: "wrap"
               }}
             >
               {pet.tags.map((tag) => (
@@ -218,7 +238,7 @@ Thank you!
                     borderRadius: "999px",
                     padding: "0.13em 0.85em",
                     fontSize: "0.90em",
-                    fontWeight: 500,
+                    fontWeight: 500
                   }}
                 >
                   {tag}
@@ -232,7 +252,7 @@ Thank you!
               margin: "0.72em 0 1.13em 0",
               lineHeight: "1.47",
               fontSize: "1.03em",
-              color: "var(--text-secondary, #6b7082)",
+              color: "var(--text-secondary, #6b7082)"
             }}
           >
             {pet.description ||
@@ -245,7 +265,7 @@ Thank you!
               gap: "1.1em",
               alignItems: "center",
               marginTop: "0.9em",
-              flexWrap: "wrap",
+              flexWrap: "wrap"
             }}
           >
             {emailHref && (
@@ -258,7 +278,7 @@ Thank you!
                   borderRadius: "999px",
                   fontWeight: 700,
                   fontSize: "1.04em",
-                  padding: ".54em 1.19em",
+                  padding: ".54em 1.19em"
                 }}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -277,7 +297,7 @@ Thank you!
                   borderRadius: "999px",
                   fontWeight: 700,
                   fontSize: "1.04em",
-                  padding: ".54em 1.19em",
+                  padding: ".54em 1.19em"
                 }}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -291,7 +311,7 @@ Thank you!
               <span
                 style={{
                   color: "var(--text-secondary, #6b7082)",
-                  fontSize: "1.03em",
+                  fontSize: "1.03em"
                 }}
               >
                 Contact info unavailable

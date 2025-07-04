@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import ImageCarousel from "./ImageCarousel";
+import Map from "./Map";
 import "../App.css";
 
 /**
@@ -258,6 +259,17 @@ Thank you!
             {pet.description ||
               "This adorable pet is searching for a loving home! Reach out to learn more or schedule a visit."}
           </p>
+          {/* Location Map (show if location available) */}
+          {pet.location && (
+            <div style={{ margin: "1.1em 0 1.27em 0" }}>
+              <Map
+                location={pet.location}
+                height={160}
+                style={{ width: "100%", minHeight: 140, borderRadius: "var(--radius)" }}
+                className="pawsconnect-detail-map"
+              />
+            </div>
+          )}
           {/* Interest actions */}
           <div
             style={{

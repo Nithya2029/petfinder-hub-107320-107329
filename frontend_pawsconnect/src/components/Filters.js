@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import LocationAutocomplete from "./LocationAutocomplete";
 import "../App.css";
 
 /**
@@ -86,31 +87,19 @@ function Filters({ filters, options, onFilterChange, onClear, style = {}, classN
           ))}
         </select>
       </div>
-      {/* Location filter */}
+      {/* Location filter (autocomplete) */}
       <div>
         <label htmlFor={makeId("location")} style={{ fontWeight: 500, color: "var(--text-secondary)", fontSize: ".98em", marginRight: 6 }}>
           Location
         </label>
-        <select
-          id={makeId("location")}
+        <LocationAutocomplete
           value={filters.location}
-          onChange={e => onFilterChange("location", e.target.value)}
-          style={{
-            borderRadius: "var(--radius)",
-            padding: "0.42em 1.2em 0.42em 0.9em",
-            border: "1px solid var(--border-color)",
-            fontSize: "1em",
-            background: "var(--bg-primary)",
-            color: "var(--text-primary)",
-            minWidth: 140,
-          }}
-          aria-label="Filter by location"
-        >
-          <option value="">All</option>
-          {options.locations.map(loc => (
-            <option value={loc} key={loc}>{loc}</option>
-          ))}
-        </select>
+          onChange={loc => onFilterChange("location", loc)}
+          options={options.locations}
+          placeholder="Select location..."
+          style={{ minWidth: 120, maxWidth: 190 }}
+          className="pawsconnect-filters-location-autocomplete"
+        />
       </div>
       {/* Clear Filters Button */}
       <button

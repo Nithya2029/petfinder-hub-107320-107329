@@ -20,15 +20,15 @@ function Filters({ filters, options, onFilterChange, onClear, style = {}, classN
     <form
       className={`pawsconnect-filters-row ${className}`}
       style={{
-        display: "flex",
-        gap: "1rem",
-        flexWrap: "wrap",
-        alignItems: "center",
         background: "var(--bg-secondary)",
         borderRadius: "var(--radius)",
         boxShadow: "0 1px 7px 0 rgba(110,198,246,.04)",
         padding: "0.9em 1em 0.9em 1em",
         margin: "0 0 0.7rem 0",
+        display: "flex",
+        gap: "1rem",
+        flexWrap: "wrap",
+        alignItems: "center",
         ...style
       }}
       aria-label="Filters for pets"

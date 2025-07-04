@@ -39,11 +39,19 @@ function SearchBar({
   return (
     <form className={`pawsconnect-searchbar ${className}`}
       role="search"
-      style={style}
+      style={{
+        ...style,
+        width: "100%",
+        maxWidth: "100vw"
+      }}
       onSubmit={e => { e.preventDefault(); if (onSearch) onSearch(inputValue); }}>
       <input
         type="text"
         className="pawsconnect-search-input"
+        style={{
+          fontSize: "1.05rem",
+          maxWidth: "100vw"
+        }}
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
@@ -55,6 +63,12 @@ function SearchBar({
         <button
           type="button"
           className="btn pawsconnect-search-btn"
+          tabIndex={0}
+          style={{
+            minWidth: 45,
+            fontSize: "1.12em",
+            minHeight: 38
+          }}
           onClick={handleButtonClick}
           aria-label="Search"
         >

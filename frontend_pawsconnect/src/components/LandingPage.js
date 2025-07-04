@@ -21,7 +21,7 @@ function LandingPage({ onAdoptNow }) {
   };
 
   return (
-    <div className="landing-root">
+    <div className="landing-root" style={{width: "100vw", minHeight: "100vh", overflowX: "hidden"}}>
       {/* Project Branding & Intro */}
       <section className="landing-intro" tabIndex={-1}>
         <img src={logo} className="landing-logo" alt="PawsConnect logo" />

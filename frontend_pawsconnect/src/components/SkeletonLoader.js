@@ -9,9 +9,9 @@ import "../App.css";
  */
 function SkeletonLoader({ count = 8 }) {
   return (
-    <div className="pet-grid skeleton-grid">
+    <div className="pet-grid skeleton-grid" style={{width: "100%"}}>
       {Array(count).fill().map((_, idx) => (
-        <div className="pet-card pet-card-skeleton" key={idx}>
+        <div className="pet-card pet-card-skeleton" key={idx} style={{minWidth: 0}}>
           <div className="pet-img-container">
             <div className="pet-img-skeleton skeleton-animate" />
             <div className="pet-card-badge-ct">

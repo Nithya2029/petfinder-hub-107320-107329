@@ -60,7 +60,19 @@ function PetCard({
   ...rest
 }) {
   return (
-    <div className="pet-card" tabIndex={0} onClick={onClick} role="button" {...rest}>
+    <div
+      className="pet-card"
+      tabIndex={0}
+      onClick={onClick}
+      role="button"
+      aria-label={`See details for ${name}`}
+      style={{
+        minWidth: 0,
+        touchAction: "manipulation",
+        ...rest.style
+      }}
+      {...rest}
+    >
       <div className="pet-img-container">
         {image ? (
           <img
@@ -68,17 +80,19 @@ function PetCard({
             src={image}
             alt={name || "Adoptable Pet"}
             loading="lazy"
+            draggable={false}
+            style={{ userSelect: "none" }}
           />
         ) : (
           <div className="pet-img-skeleton" />
         )}
-        <div className="pet-card-badge-ct">
-          {getStatusBadge(status)}
-        </div>
+        <div className="pet-card-badge-ct">{getStatusBadge(status)}</div>
       </div>
       <div className="pet-card-body">
         <div className="pet-card-title-row">
-          <h3 className="pet-card-name">{name}</h3>
+          <h3 className="pet-card-name" style={{ wordBreak: "break-word" }}>
+            {name}
+          </h3>
           {breed && <span className="pet-card-breed">{breed}</span>}
         </div>
         <div className="pet-card-meta-row">
@@ -88,7 +102,9 @@ function PetCard({
         {tags?.length > 0 && (
           <div className="pet-card-tags-row">
             {tags.map((tag) => (
-              <span className="pet-card-tag" key={tag}>{tag}</span>
+              <span className="pet-card-tag" key={tag}>
+                {tag}
+              </span>
             ))}
           </div>
         )}

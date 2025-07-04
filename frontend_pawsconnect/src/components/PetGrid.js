@@ -23,7 +23,7 @@ function PetGrid({ pets, loading, onPetClick }) {
   }
 
   return (
-    <div className="pet-grid">
+    <div className="pet-grid" style={{width: "100%"}}>
       {pets.map((pet, i) => (
         <PetCard
           key={pet.id || i}

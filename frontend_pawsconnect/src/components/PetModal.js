@@ -42,15 +42,26 @@ function PetModal({ open, pet, onClose }) {
   else if (pet.image) images = [pet.image];
   else images = [];
 
-  // Compose mailto/whatsapp links as interest actions
+  // Compose mailto/whatsapp links as interest actions with pre-filled pet details
   const mailSubject = `Inquiry about ${pet.name}`;
-  const mailBody = `Hello,\n\nI'm interested in learning more about ${pet.name} (${pet.breed || ""}).\n\n`;
+  const mailBody = `Hello,
+
+I'm interested in learning more about ${pet.name}${pet.breed ? " (" + pet.breed + ")" : ""}${
+    pet.age ? ", age: " + pet.age : ""
+  }${pet.location ? ", location: " + pet.location : ""}.
+
+Please let me know about adoption requirements, next steps, and if the pet is still available.
+
+Thank you!
+`;
   let emailHref = pet.contactEmail
     ? `mailto:${pet.contactEmail}?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`
     : null;
   let whatsappHref = pet.contactWhatsapp
     ? `https://wa.me/${pet.contactWhatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(
-        `Hi! I'm interested in ${pet.name} (${pet.breed || ""}).`
+        `Hi! I'm interested in ${pet.name}${pet.breed ? " (" + pet.breed + ")" : ""}${
+          pet.age ? ", age: " + pet.age : ""
+        }${pet.location ? ", location: " + pet.location : ""}. Is this pet available for adoption?`
       )}`
     : null;
 
@@ -59,11 +70,16 @@ function PetModal({ open, pet, onClose }) {
       className="pet-modal-overlay"
       style={{
         position: "fixed",
-        left: 0, top: 0, width: "100vw", height: "100vh",
+        left: 0,
+        top: 0,
+        width: "100vw",
+        height: "100vh",
         zIndex: 1000,
         background: "rgba(34,38,42,0.58)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        animation: "fadeIn 0.18s"
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        animation: "fadeIn 0.18s",
       }}
       onClick={onClose}
       tabIndex={-1}
@@ -80,11 +96,12 @@ function PetModal({ open, pet, onClose }) {
           minWidth: 320,
           width: "95vw",
           maxWidth: 504,
-          boxShadow: "0 7px 40px 0 rgba(110,198,246,0.18), 0 2px 8px 0 rgba(254,224,102,.09)",
+          boxShadow:
+            "0 7px 40px 0 rgba(110,198,246,0.18), 0 2px 8px 0 rgba(254,224,102,.09)",
           padding: "2.1rem 1.6rem 1.4rem 1.6rem",
-          position: "relative"
+          position: "relative",
         }}
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
         tabIndex={0}
       >
         {/* Close Button */}
@@ -92,7 +109,8 @@ function PetModal({ open, pet, onClose }) {
           className="pet-modal-close"
           style={{
             position: "absolute",
-            right: 18, top: 12,
+            right: 18,
+            top: 12,
             background: "var(--secondary, #6ec6f6)",
             color: "#fff",
             border: "none",
@@ -105,7 +123,7 @@ function PetModal({ open, pet, onClose }) {
             alignItems: "center",
             justifyContent: "center",
             cursor: "pointer",
-            boxShadow: "0 1.5px 10px 0 rgba(110,198,246,.12)"
+            boxShadow: "0 1.5px 10px 0 rgba(110,198,246,.12)",
           }}
           aria-label="Close"
           onClick={onClose}
@@ -121,26 +139,49 @@ function PetModal({ open, pet, onClose }) {
         />
         {/* Pet Information */}
         <div style={{ marginTop: ".88em" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.65em", flexWrap: "wrap" }}>
-            <h2 style={{
-              fontSize: "1.34rem",
-              fontWeight: 800,
-              margin: "0 0.25em 0 0",
-              color: "var(--text-primary)"
-            }}>{pet.name}</h2>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.65em",
+              flexWrap: "wrap",
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "1.34rem",
+                fontWeight: 800,
+                margin: "0 0.25em 0 0",
+                color: "var(--text-primary)",
+              }}
+            >
+              {pet.name}
+            </h2>
             {pet.breed && (
-              <span style={{
-                fontSize: "1.0rem",
-                background: "var(--accent, #ffd6a5)",
-                color: "#22262a",
-                fontWeight: 600,
-                padding: "0.18em 0.78em",
-                borderRadius: "999px",
-                opacity: ".98"
-              }}>{pet.breed}</span>
+              <span
+                style={{
+                  fontSize: "1.0rem",
+                  background: "var(--accent, #ffd6a5)",
+                  color: "#22262a",
+                  fontWeight: 600,
+                  padding: "0.18em 0.78em",
+                  borderRadius: "999px",
+                  opacity: ".98",
+                }}
+              >
+                {pet.breed}
+              </span>
             )}
           </div>
-          <div style={{ display: "flex", gap: ".8em", margin: "0.3em 0 0.46em 0", color: "var(--text-secondary)", fontSize: "1.04rem" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: ".8em",
+              margin: "0.3em 0 0.46em 0",
+              color: "var(--text-secondary)",
+              fontSize: "1.04rem",
+            }}
+          >
             {pet.age && <span>{pet.age}</span>}
             {pet.location && <span>📍 {pet.location}</span>}
             {pet.status && (
@@ -152,14 +193,25 @@ function PetModal({ open, pet, onClose }) {
                   padding: "0.13em 0.85em",
                   fontWeight: 700,
                   fontSize: ".98em",
-                  opacity: "0.93"
-                }}>{pet.status}</span>
+                  opacity: "0.93",
+                }}
+              >
+                {pet.status}
+              </span>
             )}
           </div>
           {pet.tags?.length > 0 && (
-            <div style={{ marginTop: "0.17em", display: "flex", gap: "0.46em", flexWrap: "wrap" }}>
-              {pet.tags.map(tag =>
-                <span key={tag}
+            <div
+              style={{
+                marginTop: "0.17em",
+                display: "flex",
+                gap: "0.46em",
+                flexWrap: "wrap",
+              }}
+            >
+              {pet.tags.map((tag) => (
+                <span
+                  key={tag}
                   style={{
                     background: "var(--secondary, #6ec6f6)",
                     color: "#fff",
@@ -167,28 +219,36 @@ function PetModal({ open, pet, onClose }) {
                     padding: "0.13em 0.85em",
                     fontSize: "0.90em",
                     fontWeight: 500,
-                  }}>{tag}</span>
-              )}
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
           )}
-          {/* Description (stub for now) */}
-          <p style={{
-            margin: "0.72em 0 1.13em 0",
-            lineHeight: "1.47",
-            fontSize: "1.03em",
-            color: "var(--text-secondary, #6b7082)"
-          }}>
-            {pet.description || "This adorable pet is searching for a loving home! Reach out to learn more or schedule a visit."}
+          {/* Description */}
+          <p
+            style={{
+              margin: "0.72em 0 1.13em 0",
+              lineHeight: "1.47",
+              fontSize: "1.03em",
+              color: "var(--text-secondary, #6b7082)",
+            }}
+          >
+            {pet.description ||
+              "This adorable pet is searching for a loving home! Reach out to learn more or schedule a visit."}
           </p>
           {/* Interest actions */}
-          <div style={{
-            display: "flex",
-            gap: "1.1em",
-            alignItems: "center",
-            marginTop: "0.9em",
-            flexWrap: "wrap",
-          }}>
-            {emailHref &&
+          <div
+            style={{
+              display: "flex",
+              gap: "1.1em",
+              alignItems: "center",
+              marginTop: "0.9em",
+              flexWrap: "wrap",
+            }}
+          >
+            {emailHref && (
               <a
                 href={emailHref}
                 className="btn"
@@ -198,14 +258,16 @@ function PetModal({ open, pet, onClose }) {
                   borderRadius: "999px",
                   fontWeight: 700,
                   fontSize: "1.04em",
-                  padding: ".54em 1.19em"
+                  padding: ".54em 1.19em",
                 }}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Express interest by email"
-              >✉️ Email interest</a>
-            }
-            {whatsappHref &&
+                aria-label={`Express interest in ${pet.name} by email`}
+              >
+                ✉️ Email interest
+              </a>
+            )}
+            {whatsappHref && (
               <a
                 href={whatsappHref}
                 className="btn"
@@ -215,16 +277,23 @@ function PetModal({ open, pet, onClose }) {
                   borderRadius: "999px",
                   fontWeight: 700,
                   fontSize: "1.04em",
-                  padding: ".54em 1.19em"
+                  padding: ".54em 1.19em",
                 }}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Express interest by WhatsApp"
-              >🐾 WhatsApp</a>
-            }
+                aria-label={`Express interest in ${pet.name} by WhatsApp`}
+              >
+                🐾 WhatsApp
+              </a>
+            )}
             {/* Custom Contact fallback */}
             {!emailHref && !whatsappHref && (
-              <span style={{ color: "var(--text-secondary, #6b7082)", fontSize: "1.03em" }}>
+              <span
+                style={{
+                  color: "var(--text-secondary, #6b7082)",
+                  fontSize: "1.03em",
+                }}
+              >
                 Contact info unavailable
               </span>
             )}
